@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-api-deploy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: todo-app-api
+  template:
+    metadata:
+      labels:
+        app: todo-app-api
+    spec:
+      containers:
+        - image: todo-api
+          name: todo-api-container
+          ports:
+            - containerPort: 8000
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: todo-api-configs
+            # - secretRef:
+            #     name: apie-secrets

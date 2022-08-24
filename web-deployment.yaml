@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-web-app-deploy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: todo-web
+  template:
+    metadata:
+      labels:
+        app: todo-web
+    spec:
+      containers:
+        - image: todo-web:latest
+          name: web-container
+          imagePullPolicy: IfNotPresent

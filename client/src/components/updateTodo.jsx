@@ -1,5 +1,6 @@
 import { useState } from "react";
-import axios from "axios";
+// import axios from "axios";
+import instance from "../baseUrl";
 
 export function UpdateTodo({ _id, handleClose, handleEdited }) {
   const [data, setData] = useState({ title: "", description: "" });
@@ -13,8 +14,10 @@ export function UpdateTodo({ _id, handleClose, handleEdited }) {
 
     console.log({ _id }, { data });
 
-    axios
-      .put(`http://192.168.49.2:31432/api/todo/${_id}`, data)
+    // axios
+    //   .put(`http://192.168.49.2:31432/api/todo/${_id}`, data)
+    instance
+      .get(`/api/todo${_id}`, data)
       .then((res) => {
         setData({ title: "", description: "" });
         console.log(res.data.message);

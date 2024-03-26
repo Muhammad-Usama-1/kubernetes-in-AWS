@@ -1,9 +1,29 @@
 # kubernetes-in-AWS
-
-
 This is a simple todo app in k8s which consist of frontend , backend , db
 For achiving in your local environment you should have understanding of docker and Basic objects
 of k8s i.e Deployment , services , Configs etc
+
+## Basic of K8s 
+There are two major  components in k8s
+###Control plane 
+  1. Kube api server —> expose apis
+  2. Etcd -> key values pairs, 
+  3. Kube-schedular—> assigning pods ,
+  4. Kube-controller—> controller process , (match running state with desire state )
+ 
+### Data Plane
+Kubelet for communication
+Kube-proxy for network communication
+Container Runtime  (Docker , Podman ,etc )
+
+
+In AWS Data Plane (Worker node ) can be EC2 or [AWS Fargate](https://aws.amazon.com/fargate/) , 
+
+In simple words thing of Fargate as a Serverless but for containers .
+
+
+
+
 
 First we will create mongo (database) deployment from mongo-deployment.yaml file it is using official image of mongo.
 
@@ -64,6 +84,9 @@ kubectl logs -f -n kube-system -l app.kubernetes.io/instance=aws-load-balancer-c
 
 
 ##  HELM Basic commands
+
+It is a package manager for k8s Manifests
+
 ```
 helm install my-app ./my-chart
 helm uninstall my-app

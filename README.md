@@ -32,17 +32,24 @@ k auth can-i get [OBJECT NAME]
 
 
 ## Ingress 
-we have multiple options of setting up Ingress in EKS , one is self managed Nginx Ingress controller while other is  aws-load-balancer-controller which can be install with the following command
+we have multiple options of setting up Ingress in EKS , 
 
+1.self managed Nginx Ingress controller
+2. AWS Managed aws-load-balancer-controller 
+
+### slef Managed
+
+https://kubernetes.github.io/ingress-nginx/deploy/#aws
+
+### aws-load-balancer-controller
 ```
-
 helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 -n kube-system \
 --set clusterName=my-eks \
 --set serviceAccount.create=false \
 --set serviceAccount.name=aws-load-balancer-controller \
 ```
-Note: By default AWS load balancer controller --> create dedicated ALB for each ingress resources ,we can combine multiple ingress and use single ALB
+Note: By default AWS load balancer controller --> create dedicated ALB for each ingress resources,we can combine multiple ingress using class  and use a single Application Load Balancer
 
 Read more at https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.7/deploy/installation/
 

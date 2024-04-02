@@ -19,10 +19,88 @@ Container Runtime  (Docker , Podman ,etc )
 
 In AWS Data Plane (Worker node ) can be EC2 or [AWS Fargate](https://aws.amazon.com/fargate/) , 
 
-In simple words thing of Fargate as a Serverless but for containers .
+In simple words think of Fargate as a Serverless but only for containers .
 
 
 
+## Launch your instance using terraform
+
+update your variables.tf with the following 
+```
+variable "vpc_cidr" {
+  description = "Vpc CIDR"
+  type        = string
+}
+
+variable "public_subnets" {
+  description = "public_subnets CIDR"
+  type        = list(string)
+}
+
+variable "private_subnets" {
+  description = "private_subnets CIDR"
+  type        = list(string)
+}
+
+variable "instance_types" {
+  description = "Node Instances"
+  type        = list(string)
+}
+```
+your main.tf file    
+```
+module "vpc" {
+  source = "terraform-aws-modules/vpc/aws"
+
+  name = "eks_cluster_vpc"
+  cidr = var.vpc_cidr
+
+  azs             = data.aws_availability_zones.azs.names
+  public_subnets  = var.public_subnets
+  private_subnets = var.private_subnets
+
+
+  enable_dns_hostnames = true
+  enable_nat_gateway   = true
+  single_nat_gateway   = true
+
+  tags = {
+    "kubernetes.io/cluster/my-eks-cluster" = "shared"
+  }
+  public_subnet_tags = {
+    "kubernetes.io/cluster/my-eks-cluster" = "shared"
+    "kubernetes.io/role/elb"               = 1
+
+  }
+  private_subnet_tags = {
+    "kubernetes.io/cluster/my-eks-cluster" = "shared"
+    "kubernetes.io/role/private_elb"       = 1
+
+  }
+}
+
+module "eks" {
+  source                         = "terraform-aws-modules/eks/aws"
+  cluster_name                   = "my-eks-cluster"
+  cluster_version                = "1.29"
+  cluster_endpoint_public_access = true
+  vpc_id                         = module.vpc.vpc_id
+  subnet_ids                     = module.vpc.private_subnets
+
+  eks_managed_node_groups = {
+    nodes = {
+      min_size       = 1
+      max_size       = 3
+      desired_size   = 1
+      instance_types = var.instance_types
+    }
+  }
+  tags = {
+    Environment = "dev"
+    Terraform   = "true"
+  }
+}
+```
 
 
 First we will create mongo (database) deployment from mongo-deployment.yaml file it is using official image of mongo.

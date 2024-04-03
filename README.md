@@ -23,9 +23,20 @@ In simple words think of Fargate as a Serverless but only for containers .
 
 
 
-## Launch your instance using terraform
+## Launch EKS using terraform
 
-update your variables.tf with the following 
+updates  variables with the following 
+
+terraform.tfvars
+```
+vpc_cidr = "192.0.0.0/16"
+
+public_subnets = ["172.0.1.0/24", "172.0.2.0/24", "172.0.3.0/24"]
+
+private_subnets = ["172.0.4.0/24", "172.0.5.0/24", "172.0.6.0/24"]
+```
+
+variables.tf
 ```
 variable "vpc_cidr" {
   description = "Vpc CIDR"

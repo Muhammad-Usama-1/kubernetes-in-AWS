@@ -9,7 +9,8 @@ There are two major  components in k8s
   1. Kube api server —> expose apis
   2. Etcd -> key values pairs, 
   3. Kube-schedular—> assigning pods ,
-  4. Kube-controller—> controller process , (match running state with desire state )
+  4. Kube-controller—> controller process , (match running state with desire state like ReplicaSetController )
+  5. Clod Control Manager if Running on k8s
  
 ### Data Plane
 Kubelet for communication
@@ -199,7 +200,7 @@ helm uninstall releasename
 helm upgrade relasname directory
 helm list -a , (it will show the revision)
 ```
-## rooblack to previous
+## Rollback to previous
 ```
 helm rollback relasname releasenumber 1
 ```
